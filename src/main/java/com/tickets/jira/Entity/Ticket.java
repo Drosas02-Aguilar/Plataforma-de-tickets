@@ -13,9 +13,15 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "TICKETS")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Ticket {
 
     @Id
@@ -50,79 +56,5 @@ public class Ticket {
     @ManyToOne
     @JoinColumn(name = "asignadoid")
     private Usuario asignado;
-
-    public int getIdticket() {
-        return idticket;
-    }
-
-    public void setIdticket(int idticket) {
-        this.idticket = idticket;
-    }
-
-    public String getTitulo() {
-        return titulo;
-    }
-
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public Prioridad getPrioridad() {
-        return prioridad;
-    }
-
-    public void setPrioridad(Prioridad prioridad) {
-        this.prioridad = prioridad;
-    }
-
-    public EstadoTicket getEstadoTicket() {
-        return estadoTicket;
-    }
-
-    public void setEstadoTicket(EstadoTicket estadoTicket) {
-        this.estadoTicket = estadoTicket;
-    }
-
-    public LocalDateTime getFechacreacion() {
-        return fechacreacion;
-    }
-
-    public void setFechacreacion(LocalDateTime fechacreacion) {
-        this.fechacreacion = fechacreacion;
-    }
-
-    public LocalDateTime getFechaactualizacion() {
-        return fechaactualizacion;
-    }
-
-    public void setFechaactualizacion(LocalDateTime fechaactualizacion) {
-        this.fechaactualizacion = fechaactualizacion;
-    }
-
-    public Usuario getCreador() {
-        return creador;
-    }
-
-    public void setCreador(Usuario creador) {
-        this.creador = creador;
-    }
-
-    public Usuario getAsignado() {
-        return asignado;
-    }
-
-    public void setAsignado(Usuario asignado) {
-        this.asignado = asignado;
-    }
-    
-    
 
 }

@@ -3,7 +3,16 @@ package com.tickets.jira.DTO;
 import com.tickets.jira.Enums.EstadoTicket;
 import com.tickets.jira.Enums.Prioridad;
 import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class TicketResponseDTO {
 
 private Integer id;

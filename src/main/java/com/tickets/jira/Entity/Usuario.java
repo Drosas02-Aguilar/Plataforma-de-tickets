@@ -12,132 +12,52 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.Set;
-
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
-@Table(name="USUARIOS")
+@Table(name = "USUARIOS")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Usuario {
-    
-@Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
-@Column(name = "idusuario")
-private String idusuario;
 
-@Column(name="nombre")
-private String nombre;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idusuario")
+    private int idusuario;
 
-@Column(name="apellidopaterno")
-private String apellidopaterno;
+    @Column(name = "nombre")
+    private String nombre;
 
-@Column(name="apellidomaterno")
-private String apellidomaterno;
+    @Column(name = "apellidopaterno")
+    private String apellidopaterno;
 
-@Column(name="correo", unique = true)
-private String correo;
+    @Column(name = "apellidomaterno")
+    private String apellidomaterno;
 
-@Column(name="username", unique = true)
-private String username;
+    @Column(name = "correo", unique = true)
+    private String correo;
 
-@Column(name="password")
-private String password;
+    @Column(name = "username", unique = true)
+    private String username;
 
-@Column(name="activo")
-private Boolean activo;
+    @Column(name = "password")
+    private String password;
 
-@Column(name="fechadecreacion")
-private LocalDateTime fechadecreacion;
+    @Column(name = "activo")
+    private Boolean activo;
 
-@ManyToMany(fetch = FetchType.EAGER)
-@JoinTable(
-name="USUARIOROLES",
-        joinColumns = @JoinColumn(name="idusuarios"),
-        inverseJoinColumns = @JoinColumn(name="idroles")
-        
-)
-private Set<Rol> roles;
+    @Column(name = "fechadecreacion")
+    private LocalDateTime fechadecreacion;
 
-    public String getIdusuario() {
-        return idusuario;
-    }
-
-    public void setIdusuario(String idusuario) {
-        this.idusuario = idusuario;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getApellidopaterno() {
-        return apellidopaterno;
-    }
-
-    public void setApellidopaterno(String apellidopaterno) {
-        this.apellidopaterno = apellidopaterno;
-    }
-
-    public String getApellidomaterno() {
-        return apellidomaterno;
-    }
-
-    public void setApellidomaterno(String apellidomaterno) {
-        this.apellidomaterno = apellidomaterno;
-    }
-
-    public String getCorreo() {
-        return correo;
-    }
-
-    public void setCorreo(String correo) {
-        this.correo = correo;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Boolean getActivo() {
-        return activo;
-    }
-
-    public void setActivo(Boolean activo) {
-        this.activo = activo;
-    }
-
-    public LocalDateTime getFechadecreacion() {
-        return fechadecreacion;
-    }
-
-    public void setFechadecreacion(LocalDateTime fechadecreacion) {
-        this.fechadecreacion = fechadecreacion;
-    }
-
-    public Set<Rol> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Rol> roles) {
-        this.roles = roles;
-    }
-
-
-
-
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "USUARIOROLES",
+            joinColumns = @JoinColumn(name = "idusuarios"),
+            inverseJoinColumns = @JoinColumn(name = "idroles")
+    )
+    private Set<Rol> roles;
 
 }

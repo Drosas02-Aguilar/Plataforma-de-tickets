@@ -3,7 +3,15 @@ package com.tickets.jira.DTO;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import java.util.Set;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class UsuarioRequestDTO {
 
     @NotBlank(message = "El nombre es obligatorio")
