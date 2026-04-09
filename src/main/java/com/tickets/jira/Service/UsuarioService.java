@@ -67,5 +67,33 @@ public class UsuarioService {
         }
         return null;
     }
+    
+    
+    @Transactional
+    public Usuario desactivarUsuario(Integer idusuario){
+        
+        Optional<Usuario> opt = iUsuario.findById(idusuario);
+        
+        if(opt.isPresent()){
+            Usuario usuario = opt.get();
+            usuario.setActivo(false);
+            iUsuario.save(usuario);
+            return usuario;
+        
+        }
+    return null;
+    }
+    
+    @Transactional
+    public Usuario activarUsuario(Integer idusuario){
+    Optional<Usuario> opt = iUsuario.findById(idusuario);
+    if(opt.isPresent()){
+    Usuario usuario = opt.get();
+    usuario.setActivo(true);
+    iUsuario.save(usuario);
+    return usuario;
+    }
+    return null;
+    }
 
 }
