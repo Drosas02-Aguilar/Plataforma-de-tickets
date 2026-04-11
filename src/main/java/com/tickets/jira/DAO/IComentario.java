@@ -5,10 +5,8 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface IComentario extends JpaRepository<Comentario, Integer> {
-    
-    
-    List<Comentario> findByTicket_Id(Integer ticketId);
 
-    List<Comentario> findByAutor_IdUsuario(Integer autorId);    
-    
+    List<Comentario> findByTicket_Idticket(Integer ticketid);
+
+    List<Comentario> findByAutor_Idusuario(Integer autorid);
 }

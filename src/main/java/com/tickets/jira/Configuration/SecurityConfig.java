@@ -34,6 +34,7 @@ public class SecurityConfig {
                                 .requestMatchers("/auth/**").permitAll()
                                 .requestMatchers("/tickets/**").authenticated()
                                 .requestMatchers("/comentarios/**").authenticated()
+                                .requestMatchers("/usuarios/**").authenticated()
                                 .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

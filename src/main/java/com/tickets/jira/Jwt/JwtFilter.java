@@ -29,14 +29,14 @@ public class JwtFilter extends OncePerRequestFilter {
 
             String token = header.substring(7);
 
-            if (jwtUtil.validarToken(token)) {
+            if (jwtUtil.validarToken(token) && 
+                    SecurityContextHolder.getContext().getAuthentication() == null) {
 
                 String username = jwtUtil.ObtenerUsername(token);
-
                 List<String> roles = jwtUtil.obtenerRoles(token);
 
                 var authorities = roles.stream()
-                        .map(SimpleGrantedAuthority::new)
+                        .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
                         .collect(Collectors.toList());
                 
                 UsernamePasswordAuthenticationToken auth =

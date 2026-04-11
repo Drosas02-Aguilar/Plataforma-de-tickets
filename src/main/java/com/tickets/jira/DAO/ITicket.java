@@ -5,13 +5,14 @@ import com.tickets.jira.Enums.EstadoTicket;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ITicket  extends JpaRepository<Ticket, Integer>{
-    
-    List<Ticket> findByEstado(EstadoTicket estado);
-    List<Ticket> findByCreador_IdUsuario(Integer idusuario);
-    List<Ticket> findByAsignado_IdUsuario(Integer idusuario);
-    List<Ticket> findByEsradoAndAsignado_IdUsuario(EstadoTicket estado, Integer idusuario);
-    
-    
-    
+public interface ITicket extends JpaRepository<Ticket, Integer> {
+
+    List<Ticket> findByEstadoTicket(EstadoTicket estado);
+
+    List<Ticket> findByCreador_Idusuario(Integer idusuario);
+
+    List<Ticket> findByAsignado_Idusuario(Integer idusuario);
+
+    List<Ticket> findByEstadoTicketAndAsignado_Idusuario(EstadoTicket estado, Integer idusuario);
+
 }

@@ -3,17 +3,21 @@ package com.tickets.jira.RestController;
 import com.tickets.jira.DTO.TicketRequestDTO;
 import com.tickets.jira.DTO.TicketResponseDTO;
 import com.tickets.jira.Entity.Ticket;
+import com.tickets.jira.Enums.EstadoTicket;
 import com.tickets.jira.Exception.ServiceResult;
 import com.tickets.jira.Service.TicketService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -21,8 +25,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class TicketController {
 
     @Autowired
-    private TicketService tieckService;
+    private TicketService ticketService;
 
+    
+   @PreAuthorize("hasRole('ADMIN','GERENTE')")
     @GetMapping
     public ResponseEntity<ServiceResult<TicketResponseDTO>> listarTickets() {
 
@@ -30,7 +36,7 @@ public class TicketController {
 
         try {
 
-            List<Ticket> lista = tieckService.listarTickets();
+            List<Ticket> lista = ticketService.listarTickets();
 
             if (!lista.isEmpty()) {
 
@@ -73,13 +79,14 @@ public class TicketController {
         return ResponseEntity.status(result.status).body(result);
     }
 
+     @PreAuthorize("hasRole('ADMIN','USUARIO','GERENTE')")   
     @GetMapping("/{id}")
     public ResponseEntity<ServiceResult<TicketResponseDTO>> obternerPorId(
             @PathVariable Integer id) {
 
         ServiceResult<TicketResponseDTO> result = new ServiceResult<>();
         try {
-            Ticket tik = tieckService.ObtenerPorId(id);
+            Ticket tik = ticketService.ObtenerPorId(id);
 
             if (tik != null) {
 
@@ -100,7 +107,7 @@ public class TicketController {
                         tik.getAsignado() != null ? tik.getAsignado().getUsername() : null
                 );
 
-                result.Object = dto;
+                result.object = dto;
                 result.correct = true;
                 result.status = 200;
                 result.message = "Ticket encontrado";
@@ -118,6 +125,7 @@ public class TicketController {
         return ResponseEntity.status(result.status).body(result);
     }
 
+        @PreAuthorize("hasRole('ADMIN','USUARIO','GERENTE','USUARIO')")
     @PostMapping
     public ResponseEntity<ServiceResult<TicketResponseDTO>> crearTicket(
             @RequestBody TicketRequestDTO request) {
@@ -131,7 +139,7 @@ public class TicketController {
             ticket.setDescripcion(request.getDescripcion());
             ticket.setPrioridad(request.getPrioridad());
 
-            Ticket creado = tieckService.crearTicket(ticket, request.getCreadorid());
+            Ticket creado = ticketService.crearTicket(ticket, request.getCreadorid());
 
             if (creado != null) {
 
@@ -152,7 +160,7 @@ public class TicketController {
                         creado.getAsignado() != null ? creado.getAsignado().getUsername() : null
                 );
 
-                result.Object = dto;
+                result.object = dto;
                 result.correct = true;
                 result.status = 201;
                 result.message = "Ticket creado correctamente";
@@ -170,6 +178,8 @@ public class TicketController {
         return ResponseEntity.status(result.status).body(result);
     }
 
+    
+        @PreAuthorize("hasRole('ADMIN','GERENTE)")
     @PutMapping("/{id}/asignar/{agenteid}")
     public ResponseEntity<ServiceResult<TicketResponseDTO>> asignarTicket(
             @PathVariable Integer id,
@@ -178,8 +188,88 @@ public class TicketController {
         ServiceResult<TicketResponseDTO> result = new ServiceResult<>();
 
         try {
+
+            Ticket ticket = ticketService.asignarTicket(id, agenteid);
+            if (ticket != null) {
+
+                TicketResponseDTO dto = new TicketResponseDTO();
+
+                dto.setId(ticket.getIdticket());
+                dto.setTitulo(ticket.getTitulo());
+                dto.setDescripcion(ticket.getDescripcion());
+                dto.setPrioridad(ticket.getPrioridad());
+                dto.setEstadoticket(ticket.getEstadoTicket());
+                dto.setFechacreacion(ticket.getFechacreacion());
+
+                dto.setCreador(
+                        ticket.getCreador() != null ? ticket.getCreador().getUsername() : null
+                );
+
+                dto.setAsignado(
+                        ticket.getAsignado() != null ? ticket.getAsignado().getUsername() : null
+                );
+
+                result.object = dto;
+                result.correct = true;
+                result.status = 200;
+                result.message = "Ticket asignado correctamente";
+
+            } else {
+
+                result.status = 404;
+                result.ErrorMessage = "No se puede asignar el ticket";
+            }
+
+        } catch (Exception ex) {
+            result.status = 500;
+            result.ErrorMessage = ex.getLocalizedMessage();
+        }
+        return ResponseEntity.status(result.status).body(result);
+    }
+
+    
+        @PreAuthorize("hasRole('ADMIN','GERENTE)")
+    @PatchMapping("/{id}/estado")
+    public ResponseEntity<ServiceResult<TicketResponseDTO>> CambiarEstado(
+            @PathVariable Integer id,
+            @RequestParam EstadoTicket estado
+    ) {
+
+        ServiceResult<TicketResponseDTO> result = new ServiceResult<>();
+
+        Ticket ticket = ticketService.cambiarEstado(id, estado);
+
+        try {
             
+            if(ticket !=null){
+
+            TicketResponseDTO dto = new TicketResponseDTO();
+
+            dto.setId(ticket.getIdticket());
+            dto.setTitulo(ticket.getTitulo());
+            dto.setDescripcion(ticket.getDescripcion());
+            dto.setPrioridad(ticket.getPrioridad());
+            dto.setEstadoticket(ticket.getEstadoTicket());
+            dto.setFechacreacion(ticket.getFechacreacion());
+
+            dto.setCreador(
+                    ticket.getCreador() != null ? ticket.getCreador().getUsername() : null
+            );
             
+           dto.setAsignado(
+                   ticket.getAsignado() != null ? ticket.getAsignado().getUsername() : null
+                   
+           );
+           
+           result.object = dto;
+           result.correct = true;
+           result.status = 200;
+           result.message = "Estado actualizado";
+            }else{
+                result.status = 404;
+                result.ErrorMessage = "Ticket no encontrado";
+            
+            }
         } catch (Exception ex) {
             result.status = 500;
             result.ErrorMessage = ex.getLocalizedMessage();

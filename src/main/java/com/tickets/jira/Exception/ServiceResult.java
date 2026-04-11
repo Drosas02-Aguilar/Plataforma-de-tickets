@@ -7,7 +7,7 @@ public class ServiceResult<T> {
     public boolean correct;
     public int status;
     public String ErrorMessage;
-    public T Object;
+    public T object;
     public List<T> Objects;
     public Exception ex;
     public String message;

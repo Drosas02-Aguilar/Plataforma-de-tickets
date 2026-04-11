@@ -7,6 +7,7 @@ import com.tickets.jira.Entity.Comentario;
 import com.tickets.jira.Entity.Ticket;
 import com.tickets.jira.Entity.Usuario;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,14 @@ public class ComentarioService {
 
     @Autowired
     private IUsuario iUsuario;
+    
+    
+    public List<Comentario>ObtenerPorTicket(Integer ticketid){
+    
+    return iComentario.findByTicket_Idticket(ticketid);
+    
+    }
+    
 
     @Transactional
     public Comentario agregarComentario(Integer ticketid, Integer autorid, String mensaje) {

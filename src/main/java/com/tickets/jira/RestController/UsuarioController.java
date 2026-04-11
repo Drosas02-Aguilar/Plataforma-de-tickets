@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +27,7 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
+    @PreAuthorize("hasRole('ADMIN','USUARIO','GERENTE')")
     @GetMapping
     public ResponseEntity<ServiceResult<UsuarioResponseDTO>> listarUsuarios() {
 
@@ -73,6 +75,7 @@ public class UsuarioController {
         return ResponseEntity.status(result.status).body(result);
     }
 
+    @PreAuthorize("hasRole('ADMIN','USUARIO','GERENTE')")
     @GetMapping("/{id}")
     public ResponseEntity<ServiceResult<UsuarioResponseDTO>> ObtenerPorId(
             @PathVariable Integer id) {
@@ -93,7 +96,7 @@ public class UsuarioController {
                 dto.setUsername(usu.getUsername());
                 dto.setActivo(usu.getActivo());
 
-                result.Object = dto;
+                result.object = dto;
                 result.correct = true;
                 result.status = 200;
                 result.message = "Usuario encontrado";
@@ -109,6 +112,7 @@ public class UsuarioController {
         return ResponseEntity.status(result.status).body(result);
     }
 
+    @PreAuthorize("hasRole('ADMIN','USUARIO','GERENTE')")
     @PostMapping
     public ResponseEntity<ServiceResult<UsuarioResponseDTO>> CrearUsuario(
             @RequestBody UsuarioRequestDTO request) {
@@ -133,7 +137,7 @@ public class UsuarioController {
                 dto.setId(creado.getIdusuario());
                 dto.setNombre(creado.getNombre());
 
-                result.Object = dto;
+                result.object = dto;
                 result.correct = true;
                 result.status = 201;
                 result.message = "Usuario creado correctamente";
@@ -154,6 +158,7 @@ public class UsuarioController {
 
     }
 
+    @PreAuthorize("hasRole('ADMIN','USUARIO','GERENTE')")
     @PutMapping("/{id}")
     public ResponseEntity<ServiceResult<Usuario>> actualizarUsuario(
             @PathVariable Integer id, @RequestBody Usuario request
@@ -167,7 +172,7 @@ public class UsuarioController {
 
             if (actualizado != null) {
 
-                result.Object = actualizado;
+                result.object = actualizado;
                 result.correct = true;
                 result.status = 200;
                 result.message = "Usuario actualizado correctamente";
@@ -188,6 +193,7 @@ public class UsuarioController {
 
     }
 
+    @PreAuthorize("hasRole('ADMIN','GERENTE)")
     @PatchMapping("/desactivar/{id}")
     public ResponseEntity<ServiceResult<Usuario>> desactivarUsuario(
             @PathVariable Integer id
@@ -200,7 +206,7 @@ public class UsuarioController {
 
             if (usuario != null) {
 
-                result.Object = usuario;
+                result.object = usuario;
                 result.correct = true;
                 result.status = 200;
                 result.message = "Usuario desactivado";
@@ -220,6 +226,7 @@ public class UsuarioController {
 
     }
 
+    @PreAuthorize("hasRole('ADMIN','GERENTE)")
     @PatchMapping("/activar/{id}")
     public ResponseEntity<ServiceResult<Usuario>> activarUsuario(
             @PathVariable Integer id
@@ -230,7 +237,7 @@ public class UsuarioController {
 
         if (usuario != null) {
 
-            result.Object = usuario;
+            result.object = usuario;
             result.correct = true;
             result.status = 200;
             result.message = "Usuario activado";
