@@ -16,7 +16,6 @@ public class UsuarioRequestDTO {
 
     @NotBlank(message = "El nombre es obligatorio")
     private String nombre;
-    
     private String apellidopaterno;
     private String apellidomaterno;
     

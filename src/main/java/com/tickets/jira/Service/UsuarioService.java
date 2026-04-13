@@ -10,11 +10,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UsuarioService {
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private IUsuario iUsuario;
@@ -36,6 +40,7 @@ public class UsuarioService {
 
         usuario.setActivo(true);
         usuario.setFechadecreacion(LocalDateTime.now());
+        usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
 
         Set<Rol> roles = new HashSet<>();
         for (Integer idRol : rolesids) {
@@ -56,44 +61,47 @@ public class UsuarioService {
 
             Usuario usuario = opt.get();
 
-            usuario.setNombre(usuarioNuevo.getNombre());
-            usuario.setApellidopaterno(usuarioNuevo.getApellidopaterno());
-            usuario.setApellidomaterno(usuarioNuevo.getApellidomaterno());
-            usuario.setCorreo(usuarioNuevo.getCorreo());
-
+            usuario.setNombre(tieneValor(usuarioNuevo.getNombre()) ? usuarioNuevo.getNombre() : usuario.getNombre());
+            usuario.setApellidopaterno(tieneValor(usuarioNuevo.getApellidopaterno()) ? usuarioNuevo.getApellidopaterno() : usuario.getApellidopaterno());
+            usuario.setApellidomaterno(tieneValor(usuarioNuevo.getApellidomaterno()) ? usuarioNuevo.getApellidomaterno() : usuario.getApellidomaterno());
+            usuario.setCorreo(tieneValor(usuarioNuevo.getCorreo()) ? usuarioNuevo.getCorreo() : usuario.getCorreo());
+            usuario.setPassword(tieneValor(usuarioNuevo.getPassword()) ? passwordEncoder.encode(usuarioNuevo.getPassword()) : usuario.getPassword());
             iUsuario.save(usuario);
             return usuario;
 
         }
         return null;
     }
-    
-    
+
     @Transactional
-    public Usuario desactivarUsuario(Integer idusuario){
-        
+    public Usuario desactivarUsuario(Integer idusuario) {
+
         Optional<Usuario> opt = iUsuario.findById(idusuario);
-        
-        if(opt.isPresent()){
+
+        if (opt.isPresent()) {
             Usuario usuario = opt.get();
             usuario.setActivo(false);
             iUsuario.save(usuario);
             return usuario;
-        
+
         }
-    return null;
+        return null;
     }
-    
+
     @Transactional
-    public Usuario activarUsuario(Integer idusuario){
-    Optional<Usuario> opt = iUsuario.findById(idusuario);
-    if(opt.isPresent()){
-    Usuario usuario = opt.get();
-    usuario.setActivo(true);
-    iUsuario.save(usuario);
-    return usuario;
+    public Usuario activarUsuario(Integer idusuario) {
+        Optional<Usuario> opt = iUsuario.findById(idusuario);
+        if (opt.isPresent()) {
+            Usuario usuario = opt.get();
+            usuario.setActivo(true);
+            iUsuario.save(usuario);
+            return usuario;
+        }
+        return null;
     }
-    return null;
+
+    private boolean tieneValor(String valor) {
+        return valor != null && !valor.isBlank();
     }
 
 }

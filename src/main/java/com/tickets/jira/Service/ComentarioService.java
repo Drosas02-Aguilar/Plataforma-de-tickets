@@ -34,10 +34,10 @@ public class ComentarioService {
     
 
     @Transactional
-    public Comentario agregarComentario(Integer ticketid, Integer autorid, String mensaje) {
+    public Comentario agregarComentario(Integer ticketid, String username, String mensaje) {
 
         Optional<Ticket> ticketOpt = iTicket.findById(ticketid);
-        Optional<Usuario> usuOpt = iUsuario.findById(autorid);
+        Optional<Usuario> usuOpt = iUsuario.findByUsername(username);
 
         if (ticketOpt.isPresent() && usuOpt.isPresent()) {
             Comentario comentario = new Comentario();

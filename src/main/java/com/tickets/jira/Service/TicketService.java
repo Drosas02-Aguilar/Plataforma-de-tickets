@@ -32,14 +32,13 @@ public class TicketService {
     }
 
     @Transactional
-    public Ticket crearTicket(Ticket ticket, Integer creadoid) {
-        Optional<Usuario> usuarioOpt = iUsuario.findById(creadoid);
+    public Ticket crearTicket(Ticket ticket, String username) {
+        Optional<Usuario> usuarioOpt = iUsuario.findByUsername(username);
 
         if (usuarioOpt.isPresent()) {
             ticket.setCreador(usuarioOpt.get());
             ticket.setEstadoTicket(EstadoTicket.ABIERTO);
             ticket.setFechacreacion(LocalDateTime.now());
-
             return iTicket.save(ticket);
 
         }

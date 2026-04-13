@@ -9,6 +9,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -77,14 +78,14 @@ public class ComentariosRestController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping
     public ResponseEntity<ServiceResult<ComentarioResponseDTO>> agregarComentario(
-            @RequestBody ComentarioRequestDTO request
+            @RequestBody ComentarioRequestDTO request, @AuthenticationPrincipal String username
     ) {
         ServiceResult<ComentarioResponseDTO> result = new ServiceResult<>();
         try {
 
             Comentario comentario = comentarioService.agregarComentario(
                     request.getTicketsid(),
-                    request.getAutorid(),
+                    username,
                     request.getMensaje()
             );
 

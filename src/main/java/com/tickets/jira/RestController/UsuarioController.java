@@ -27,7 +27,7 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
-    @PreAuthorize("hasRole('ADMIN','USUARIO','GERENTE')")
+    @PreAuthorize("hasAnyRole('ADMIN','USER','AGENTE')")
     @GetMapping
     public ResponseEntity<ServiceResult<UsuarioResponseDTO>> listarUsuarios() {
 
@@ -75,7 +75,7 @@ public class UsuarioController {
         return ResponseEntity.status(result.status).body(result);
     }
 
-    @PreAuthorize("hasRole('ADMIN','USUARIO','GERENTE')")
+    @PreAuthorize("hasAnyRole('ADMIN','USER','AGENTE')")
     @GetMapping("/{id}")
     public ResponseEntity<ServiceResult<UsuarioResponseDTO>> ObtenerPorId(
             @PathVariable Integer id) {
@@ -112,7 +112,7 @@ public class UsuarioController {
         return ResponseEntity.status(result.status).body(result);
     }
 
-    @PreAuthorize("hasRole('ADMIN','USUARIO','GERENTE')")
+    @PreAuthorize("hasAnyRole('ADMIN','USER','AGENTE')")
     @PostMapping
     public ResponseEntity<ServiceResult<UsuarioResponseDTO>> CrearUsuario(
             @RequestBody UsuarioRequestDTO request) {
@@ -134,8 +134,18 @@ public class UsuarioController {
 
             if (creado != null) {
                 UsuarioResponseDTO dto = new UsuarioResponseDTO();
-                dto.setId(creado.getIdusuario());
                 dto.setNombre(creado.getNombre());
+                dto.setApellidopaterno(creado.getApellidopaterno());
+                dto.setApellidomaterno(creado.getApellidomaterno());
+                dto.setCorreo(creado.getCorreo());
+                dto.setUsername(creado.getUsername());
+                dto.setActivo(creado.getActivo());
+                dto.setRoles(
+                        creado.getRoles().stream()
+                                .map(r -> r.getNombre())
+                                .collect(Collectors.toSet())
+                );
+                dto.setFechadecreacion(creado.getFechadecreacion());
 
                 result.object = dto;
                 result.correct = true;
@@ -158,55 +168,67 @@ public class UsuarioController {
 
     }
 
-    @PreAuthorize("hasRole('ADMIN','USUARIO','GERENTE')")
+    @PreAuthorize("hasAnyRole('ADMIN','USER','AGENTE')")
     @PutMapping("/{id}")
-    public ResponseEntity<ServiceResult<Usuario>> actualizarUsuario(
+    public ResponseEntity<ServiceResult<UsuarioResponseDTO>> actualizarUsuario(
             @PathVariable Integer id, @RequestBody Usuario request
     ) {
-
-        ServiceResult<Usuario> result = new ServiceResult<>();
-
+        ServiceResult<UsuarioResponseDTO> result = new ServiceResult<>();
         try {
-
             Usuario actualizado = usuarioService.actualizarUsuario(id, request);
-
             if (actualizado != null) {
 
-                result.object = actualizado;
+                UsuarioResponseDTO dto = new UsuarioResponseDTO();
+                dto.setId(actualizado.getIdusuario());
+                dto.setNombre(actualizado.getNombre());
+                dto.setApellidopaterno(actualizado.getApellidopaterno());
+                dto.setApellidomaterno(actualizado.getApellidomaterno());
+                dto.setCorreo(actualizado.getCorreo());
+                dto.setUsername(actualizado.getUsername());
+                result.object = dto;
                 result.correct = true;
                 result.status = 200;
                 result.message = "Usuario actualizado correctamente";
 
             } else {
-
                 result.status = 404;
                 result.ErrorMessage = "Usuario no encontrado con id: " + id;
             }
-
         } catch (Exception ex) {
-
             result.status = 500;
             result.ErrorMessage = ex.getLocalizedMessage();
         }
-
         return ResponseEntity.status(result.status).body(result);
-
     }
 
-    @PreAuthorize("hasRole('ADMIN','GERENTE)")
+    @PreAuthorize("hasAnyRole('ADMIN','AGENTE')")
     @PatchMapping("/desactivar/{id}")
-    public ResponseEntity<ServiceResult<Usuario>> desactivarUsuario(
+    public ResponseEntity<ServiceResult<UsuarioResponseDTO>> desactivarUsuario(
             @PathVariable Integer id
     ) {
-        ServiceResult result = new ServiceResult();
+        ServiceResult<UsuarioResponseDTO> result = new ServiceResult<>();
 
         try {
 
-            Usuario usuario = usuarioService.desactivarUsuario(id);
+            Usuario desactivado = usuarioService.desactivarUsuario(id);
 
-            if (usuario != null) {
+            if (desactivado != null) {
 
-                result.object = usuario;
+                UsuarioResponseDTO dto = new UsuarioResponseDTO();
+                dto.setId(desactivado.getIdusuario());
+                dto.setNombre(desactivado.getNombre());
+                dto.setApellidopaterno(desactivado.getApellidopaterno());
+                dto.setApellidomaterno(desactivado.getApellidomaterno());
+                dto.setCorreo(desactivado.getCorreo());
+                dto.setUsername(desactivado.getUsername());
+                dto.setActivo(desactivado.getActivo());
+                dto.setRoles(
+                        desactivado.getRoles().stream()
+                                .map(r -> r.getNombre())
+                                .collect(Collectors.toSet())
+                );
+
+                result.object = dto;
                 result.correct = true;
                 result.status = 200;
                 result.message = "Usuario desactivado";
@@ -226,18 +248,33 @@ public class UsuarioController {
 
     }
 
-    @PreAuthorize("hasRole('ADMIN','GERENTE)")
+    @PreAuthorize("hasAnyRole('ADMIN','AGENTE')")
     @PatchMapping("/activar/{id}")
-    public ResponseEntity<ServiceResult<Usuario>> activarUsuario(
+    public ResponseEntity<ServiceResult<UsuarioResponseDTO>> activarUsuario(
             @PathVariable Integer id
     ) {
-        ServiceResult result = new ServiceResult();
+        ServiceResult<UsuarioResponseDTO> result = new ServiceResult<>();
 
-        Usuario usuario = usuarioService.activarUsuario(id);
+        Usuario activado = usuarioService.activarUsuario(id);
 
-        if (usuario != null) {
+        if (activado != null) {
 
-            result.object = usuario;
+            UsuarioResponseDTO dto = new UsuarioResponseDTO();
+
+            dto.setId(activado.getIdusuario());
+            dto.setNombre(activado.getNombre());
+            dto.setApellidopaterno(activado.getApellidopaterno());
+            dto.setApellidomaterno(activado.getApellidomaterno());
+            dto.setCorreo(activado.getCorreo());
+            dto.setUsername(activado.getUsername());
+            dto.setActivo(activado.getActivo());
+            dto.setRoles(
+                    activado.getRoles().stream()
+                            .map(r -> r.getNombre())
+                            .collect(Collectors.toSet())
+            );
+            
+            result.object = dto;
             result.correct = true;
             result.status = 200;
             result.message = "Usuario activado";

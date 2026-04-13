@@ -10,6 +10,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,7 +29,7 @@ public class TicketController {
     private TicketService ticketService;
 
     
-   @PreAuthorize("hasRole('ADMIN','GERENTE')")
+    @PreAuthorize("hasAnyRole('ADMIN','AGENTE')")
     @GetMapping
     public ResponseEntity<ServiceResult<TicketResponseDTO>> listarTickets() {
 
@@ -79,7 +80,7 @@ public class TicketController {
         return ResponseEntity.status(result.status).body(result);
     }
 
-     @PreAuthorize("hasRole('ADMIN','USUARIO','GERENTE')")   
+    @PreAuthorize("hasAnyRole('ADMIN','USER','AGENTE')")
     @GetMapping("/{id}")
     public ResponseEntity<ServiceResult<TicketResponseDTO>> obternerPorId(
             @PathVariable Integer id) {
@@ -125,12 +126,12 @@ public class TicketController {
         return ResponseEntity.status(result.status).body(result);
     }
 
-        @PreAuthorize("hasRole('ADMIN','USUARIO','GERENTE','USUARIO')")
+    @PreAuthorize("hasAnyRole('ADMIN','USER','AGENTE')")
     @PostMapping
     public ResponseEntity<ServiceResult<TicketResponseDTO>> crearTicket(
-            @RequestBody TicketRequestDTO request) {
+            @RequestBody TicketRequestDTO request, @AuthenticationPrincipal String username) {
 
-        ServiceResult result = new ServiceResult();
+        ServiceResult<TicketResponseDTO> result = new ServiceResult<>();
 
         try {
 
@@ -139,7 +140,7 @@ public class TicketController {
             ticket.setDescripcion(request.getDescripcion());
             ticket.setPrioridad(request.getPrioridad());
 
-            Ticket creado = ticketService.crearTicket(ticket, request.getCreadorid());
+            Ticket creado = ticketService.crearTicket(ticket, username);
 
             if (creado != null) {
 
@@ -179,7 +180,7 @@ public class TicketController {
     }
 
     
-        @PreAuthorize("hasRole('ADMIN','GERENTE)")
+    @PreAuthorize("hasAnyRole('ADMIN','AGENTE')")
     @PutMapping("/{id}/asignar/{agenteid}")
     public ResponseEntity<ServiceResult<TicketResponseDTO>> asignarTicket(
             @PathVariable Integer id,
@@ -228,7 +229,7 @@ public class TicketController {
     }
 
     
-        @PreAuthorize("hasRole('ADMIN','GERENTE)")
+    @PreAuthorize("hasAnyRole('ADMIN','AGENTE')")
     @PatchMapping("/{id}/estado")
     public ResponseEntity<ServiceResult<TicketResponseDTO>> CambiarEstado(
             @PathVariable Integer id,

@@ -39,7 +39,7 @@ public class AuthService {
 
             if (passwordEncoder.matches(password, usuario.getPassword())) {
 
-                
+                passwordValida = true;
                 
             }else if(password.equals(usuario.getPassword())){
             

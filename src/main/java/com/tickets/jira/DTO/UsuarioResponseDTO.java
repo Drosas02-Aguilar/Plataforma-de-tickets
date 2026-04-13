@@ -1,5 +1,6 @@
 package com.tickets.jira.DTO;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,6 +21,7 @@ public class UsuarioResponseDTO {
     private String correo;
     private String username;
     private Boolean activo;
+    private LocalDateTime fechadecreacion;
 
     private Set<String> roles;
 }

@@ -22,9 +22,6 @@ public class TicketRequestDTO {
     @NotNull(message = "La prioridad es obligatoria")
     private Prioridad prioridad;
 
-    @NotNull(message = "El creador es obligatorio")
-    private Integer creadorid;
-
 
     
 }
