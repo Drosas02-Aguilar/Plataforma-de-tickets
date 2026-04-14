@@ -1,0 +1,504 @@
+{
+  "info": {
+    "_postman_id": "ef6c0ac2-330a-42ab-b021-29aabb2a7fab",
+    "name": "Tickets",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "50211303",
+    "_collection_link": "https://go.postman.co/collection/50211303-ef6c0ac2-330a-42ab-b021-29aabb2a7fab?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Login",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"username\": \"damian\",\r\n  \"password\": \"123456\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/auth/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Crear usuario",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkYW1pYW4iLCJyb2xlcyI6WyJBRE1JTiJdLCJpYXQiOjE3NzYxMDIzMTgsImV4cCI6MTc3NjEwNTkxOH0.D7tB5cz7YSsey636T2ZJWzUuIOTS3CaMF2nG2yz2dkM",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"nombre\": \"Axel\",\r\n    \"apellidopaterno\": \"Martinez\",\r\n    \"apellidomaterno\": \"Salgado\",\r\n    \"correo\": \"axel@test.com\",\r\n    \"username\": \"axel123\",\r\n    \"password\": \"123456\",\r\n    \"rolesids\": [2]\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/usuarios",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "usuarios"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Actualizar usuarios",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkYW1pYW4iLCJyb2xlcyI6WyJBRE1JTiJdLCJpYXQiOjE3NzYxMDYxOTMsImV4cCI6MTc3NjEwOTc5M30.wUHAKBIJZZOdprTgdu7LcOPYEVILKagoqjpt81xr938",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"username\": \"diegoAVG\",\r\n    \"password\": \"123456\"\r\n\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/usuarios/2",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "usuarios",
+            "2"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Obtener todos usuarios",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkYW1pYW4iLCJyb2xlcyI6WyJBRE1JTiJdLCJpYXQiOjE3NzYxMTQ5MDgsImV4cCI6MTc3NjExODUwOH0.DV19oNJ0FP49B3mTzaF5hgVwtlUqIjFQuNFXjYMhcTQ",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/usuarios",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "usuarios"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Obtener usuarios por id",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkYW1pYW4iLCJyb2xlcyI6WyJBRE1JTiJdLCJpYXQiOjE3NzYxMDY3MTcsImV4cCI6MTc3NjExMDMxN30.t1jQ0s1WDfZ6LEH7w8cPoAKWgtXisM7WHNcVrH0m7LA",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/usuarios/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "usuarios",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Desactivar usuarios",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkYW1pYW4iLCJyb2xlcyI6WyJBRE1JTiJdLCJpYXQiOjE3NzYxMDY3MTcsImV4cCI6MTc3NjExMDMxN30.t1jQ0s1WDfZ6LEH7w8cPoAKWgtXisM7WHNcVrH0m7LA",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/usuarios/desactivar/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "usuarios",
+            "desactivar",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Activar Usuario",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkYW1pYW4iLCJyb2xlcyI6WyJBRE1JTiJdLCJpYXQiOjE3NzYxMDY3MTcsImV4cCI6MTc3NjExMDMxN30.t1jQ0s1WDfZ6LEH7w8cPoAKWgtXisM7WHNcVrH0m7LA",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/usuarios/activar/2",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "usuarios",
+            "activar",
+            "2"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Desactivar Usuario",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkYW1pYW4iLCJyb2xlcyI6WyJBRE1JTiJdLCJpYXQiOjE3NzYxMDY3MTcsImV4cCI6MTc3NjExMDMxN30.t1jQ0s1WDfZ6LEH7w8cPoAKWgtXisM7WHNcVrH0m7LA",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/usuarios/desactivar/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "usuarios",
+            "desactivar",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Crear Ticket",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkYW1pYW4iLCJyb2xlcyI6WyJBRE1JTiJdLCJpYXQiOjE3NzYxMTQ5MDgsImV4cCI6MTc3NjExODUwOH0.DV19oNJ0FP49B3mTzaF5hgVwtlUqIjFQuNFXjYMhcTQ",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"titulo\": \"Error de paginacion\",\r\n    \"descripcion\": \"No salta la paginacion del sistema\",\r\n    \"prioridad\": \"ALTA\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/tickets",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "tickets"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Asignar Ticket a agente",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkYW1pYW4iLCJyb2xlcyI6WyJBRE1JTiJdLCJpYXQiOjE3NzYxMTQ5MDgsImV4cCI6MTc3NjExODUwOH0.DV19oNJ0FP49B3mTzaF5hgVwtlUqIjFQuNFXjYMhcTQ",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PUT",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/tickets/2/asignar/22",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "tickets",
+            "2",
+            "asignar",
+            "22"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Cambiar de estado",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkYW1pYW4iLCJyb2xlcyI6WyJBRE1JTiJdLCJpYXQiOjE3NzYxMTQ5MDgsImV4cCI6MTc3NjExODUwOH0.DV19oNJ0FP49B3mTzaF5hgVwtlUqIjFQuNFXjYMhcTQ",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/tickets/2/estado?estado=RESUELTO",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "tickets",
+            "2",
+            "estado"
+          ],
+          "query": [
+            {
+              "key": "estado",
+              "value": "RESUELTO"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Listado de Tickets",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkYW1pYW4iLCJyb2xlcyI6WyJBRE1JTiJdLCJpYXQiOjE3NzYxMTQ5MDgsImV4cCI6MTc3NjExODUwOH0.DV19oNJ0FP49B3mTzaF5hgVwtlUqIjFQuNFXjYMhcTQ",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/tickets",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "tickets"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Encontrar ticket por id",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkYW1pYW4iLCJyb2xlcyI6WyJBRE1JTiJdLCJpYXQiOjE3NzYxMTQ5MDgsImV4cCI6MTc3NjExODUwOH0.DV19oNJ0FP49B3mTzaF5hgVwtlUqIjFQuNFXjYMhcTQ",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/tickets/2",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "tickets",
+            "2"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Agregar comentario",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkYW1pYW4iLCJyb2xlcyI6WyJBRE1JTiJdLCJpYXQiOjE3NzYxMTQ5MDgsImV4cCI6MTc3NjExODUwOH0.DV19oNJ0FP49B3mTzaF5hgVwtlUqIjFQuNFXjYMhcTQ",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"ticketsid\": 2,\r\n    \"mensaje\": \"Ya revisé el problema, ya se soluciono\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/comentarios",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "comentarios"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Listar comentarios",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkYW1pYW4iLCJyb2xlcyI6WyJBRE1JTiJdLCJpYXQiOjE3NzYxMTQ5MDgsImV4cCI6MTc3NjExODUwOH0.DV19oNJ0FP49B3mTzaF5hgVwtlUqIjFQuNFXjYMhcTQ",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/comentarios/ticket/2",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "comentarios",
+            "ticket",
+            "2"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
