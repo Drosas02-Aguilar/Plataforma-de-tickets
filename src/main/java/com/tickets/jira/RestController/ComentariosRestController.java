@@ -24,8 +24,7 @@ public class ComentariosRestController {
     @Autowired
     private ComentarioService comentarioService;
 
-    
-        @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/ticket/{ticketid}")
     public ResponseEntity<ServiceResult<ComentarioResponseDTO>> listarPorTicket(
             @PathVariable Integer ticketid
@@ -54,16 +53,16 @@ public class ComentariosRestController {
 
                     return dto;
                 }).toList();
-                
+
                 result.Objects = dtos;
                 result.correct = true;
                 result.status = 200;
                 result.message = "Comentarios encontrados";
 
-            }else{
+            } else {
                 result.status = 500;
                 result.ErrorMessage = "No hay comentarios en este Ticket";
-            
+
             }
 
         } catch (Exception ex) {
@@ -76,15 +75,15 @@ public class ComentariosRestController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @PostMapping
+    @PostMapping("/ticket/{ticketid}")
     public ResponseEntity<ServiceResult<ComentarioResponseDTO>> agregarComentario(
-            @RequestBody ComentarioRequestDTO request, @AuthenticationPrincipal String username
+            @PathVariable Integer ticketid, @RequestBody ComentarioRequestDTO request, @AuthenticationPrincipal String username
     ) {
         ServiceResult<ComentarioResponseDTO> result = new ServiceResult<>();
         try {
 
             Comentario comentario = comentarioService.agregarComentario(
-                    request.getTicketsid(),
+                    ticketid,
                     username,
                     request.getMensaje()
             );

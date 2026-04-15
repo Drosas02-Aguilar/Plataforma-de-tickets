@@ -20,6 +20,12 @@ public class TicketService {
 
     @Autowired
     private IUsuario iUsuario;
+    
+    
+    public List<Ticket> obtenerPorCreador(Integer idusuario){
+    return iTicket.findByCreador_Idusuario(idusuario);
+    
+    }
 
     public List<Ticket> listarTickets() {
         return iTicket.findAll();

@@ -8,25 +8,26 @@ import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 public class CrossFilterConfig {
-    
-    
+
     @Bean
-     public CorsFilter corsFilter(){
+    public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration corsConfig = new CorsConfiguration();
-        
-        corsConfig.addAllowedOrigin("*");
-        
+
+        corsConfig.addAllowedOriginPattern("*");
+
         corsConfig.addAllowedMethod("GET");
         corsConfig.addAllowedMethod("POST");
         corsConfig.addAllowedMethod("PUT");
         corsConfig.addAllowedMethod("DELETE");
-        corsConfig.addAllowedMethod("PACHT");
-        
+        corsConfig.addAllowedMethod("PATCH");
+
         corsConfig.addAllowedHeader("*");
+
+        corsConfig.setAllowCredentials(true);
+
         source.registerCorsConfiguration("/**", corsConfig);
-    
-        return new CorsFilter(source);  
+
+        return new CorsFilter(source);
     }
-    
 }

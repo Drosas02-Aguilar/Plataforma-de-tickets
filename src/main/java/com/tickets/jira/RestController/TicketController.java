@@ -1,12 +1,15 @@
 package com.tickets.jira.RestController;
 
+import com.tickets.jira.DAO.IUsuario;
 import com.tickets.jira.DTO.TicketRequestDTO;
 import com.tickets.jira.DTO.TicketResponseDTO;
 import com.tickets.jira.Entity.Ticket;
+import com.tickets.jira.Entity.Usuario;
 import com.tickets.jira.Enums.EstadoTicket;
 import com.tickets.jira.Exception.ServiceResult;
 import com.tickets.jira.Service.TicketService;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,7 +31,9 @@ public class TicketController {
     @Autowired
     private TicketService ticketService;
 
-    
+    @Autowired
+    private IUsuario iUsuario;
+
     @PreAuthorize("hasAnyRole('ADMIN','AGENTE')")
     @GetMapping
     public ResponseEntity<ServiceResult<TicketResponseDTO>> listarTickets() {
@@ -179,7 +184,6 @@ public class TicketController {
         return ResponseEntity.status(result.status).body(result);
     }
 
-    
     @PreAuthorize("hasAnyRole('ADMIN','AGENTE')")
     @PutMapping("/{id}/asignar/{agenteid}")
     public ResponseEntity<ServiceResult<TicketResponseDTO>> asignarTicket(
@@ -228,7 +232,6 @@ public class TicketController {
         return ResponseEntity.status(result.status).body(result);
     }
 
-    
     @PreAuthorize("hasAnyRole('ADMIN','AGENTE')")
     @PatchMapping("/{id}/estado")
     public ResponseEntity<ServiceResult<TicketResponseDTO>> CambiarEstado(
@@ -241,36 +244,85 @@ public class TicketController {
         Ticket ticket = ticketService.cambiarEstado(id, estado);
 
         try {
-            
-            if(ticket !=null){
 
-            TicketResponseDTO dto = new TicketResponseDTO();
+            if (ticket != null) {
 
-            dto.setId(ticket.getIdticket());
-            dto.setTitulo(ticket.getTitulo());
-            dto.setDescripcion(ticket.getDescripcion());
-            dto.setPrioridad(ticket.getPrioridad());
-            dto.setEstadoticket(ticket.getEstadoTicket());
-            dto.setFechacreacion(ticket.getFechacreacion());
+                TicketResponseDTO dto = new TicketResponseDTO();
 
-            dto.setCreador(
-                    ticket.getCreador() != null ? ticket.getCreador().getUsername() : null
-            );
-            
-           dto.setAsignado(
-                   ticket.getAsignado() != null ? ticket.getAsignado().getUsername() : null
-                   
-           );
-           
-           result.object = dto;
-           result.correct = true;
-           result.status = 200;
-           result.message = "Estado actualizado";
-            }else{
+                dto.setId(ticket.getIdticket());
+                dto.setTitulo(ticket.getTitulo());
+                dto.setDescripcion(ticket.getDescripcion());
+                dto.setPrioridad(ticket.getPrioridad());
+                dto.setEstadoticket(ticket.getEstadoTicket());
+                dto.setFechacreacion(ticket.getFechacreacion());
+
+                dto.setCreador(
+                        ticket.getCreador() != null ? ticket.getCreador().getUsername() : null
+                );
+
+                dto.setAsignado(
+                        ticket.getAsignado() != null ? ticket.getAsignado().getUsername() : null
+                );
+
+                result.object = dto;
+                result.correct = true;
+                result.status = 200;
+                result.message = "Estado actualizado";
+            } else {
                 result.status = 404;
                 result.ErrorMessage = "Ticket no encontrado";
-            
+
             }
+        } catch (Exception ex) {
+            result.status = 500;
+            result.ErrorMessage = ex.getLocalizedMessage();
+        }
+        return ResponseEntity.status(result.status).body(result);
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN','USER','AGENTE')")
+    @GetMapping("/mis-tickets")
+    public ResponseEntity<ServiceResult<TicketResponseDTO>> misTickets(
+            @AuthenticationPrincipal String username) {
+
+        ServiceResult<TicketResponseDTO> result = new ServiceResult<>();
+
+        try {
+            Optional<Usuario> usuarioOpt = iUsuario.findByUsername(username);
+
+            if (!usuarioOpt.isPresent()) {
+                result.status = 404;
+                result.ErrorMessage = "Usuario no encontrado";
+                return ResponseEntity.status(result.status).body(result);
+            }
+
+            List<Ticket> lista = ticketService.obtenerPorCreador(
+                    usuarioOpt.get().getIdusuario()
+            );
+
+            if (!lista.isEmpty()) {
+                List<TicketResponseDTO> dtos = lista.stream().map(t -> {
+                    TicketResponseDTO dto = new TicketResponseDTO();
+                    dto.setId(t.getIdticket());
+                    dto.setTitulo(t.getTitulo());
+                    dto.setDescripcion(t.getDescripcion());
+                    dto.setPrioridad(t.getPrioridad());
+                    dto.setEstadoticket(t.getEstadoTicket());
+                    dto.setFechacreacion(t.getFechacreacion());
+                    dto.setCreador(t.getCreador() != null ? t.getCreador().getUsername() : null);
+                    dto.setAsignado(t.getAsignado() != null ? t.getAsignado().getUsername() : null);
+                    return dto;
+                }).toList();
+
+                result.Objects = dtos;
+                result.correct = true;
+                result.status = 200;
+                result.message = "Mis tickets encontrados";
+            } else {
+                result.status = 404;
+                result.ErrorMessage = "No tienes tickets creados";
+            }
+
         } catch (Exception ex) {
             result.status = 500;
             result.ErrorMessage = ex.getLocalizedMessage();
