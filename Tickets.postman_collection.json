@@ -273,7 +273,7 @@
           "bearer": [
             {
               "key": "token",
-              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkYW1pYW4iLCJyb2xlcyI6WyJBRE1JTiJdLCJpYXQiOjE3NzYxMTQ5MDgsImV4cCI6MTc3NjExODUwOH0.DV19oNJ0FP49B3mTzaF5hgVwtlUqIjFQuNFXjYMhcTQ",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJheGVsMTIzIiwicm9sZXMiOlsiVVNFUiJdLCJpYXQiOjE3NzYyNzgxMTQsImV4cCI6MTc3NjI4MTcxNH0.RLRbUMoNa6dQaLBogE_7VUHz0-QZzWMPjG6AgpUTmJ4",
               "type": "string"
             }
           ]
@@ -380,7 +380,7 @@
           "bearer": [
             {
               "key": "token",
-              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkYW1pYW4iLCJyb2xlcyI6WyJBRE1JTiJdLCJpYXQiOjE3NzYxMTQ5MDgsImV4cCI6MTc3NjExODUwOH0.DV19oNJ0FP49B3mTzaF5hgVwtlUqIjFQuNFXjYMhcTQ",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkYW1pYW4iLCJyb2xlcyI6WyJBRE1JTiJdLCJpYXQiOjE3NzYyMTIzMDEsImV4cCI6MTc3NjIxNTkwMX0.T0l-vgrIvpK02ykKMhfV_hFo7RtGvSeDhg6KdtBeisY",
               "type": "string"
             }
           ]
@@ -448,7 +448,7 @@
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n    \"ticketsid\": 2,\r\n    \"mensaje\": \"Ya revisé el problema, ya se soluciono\"\r\n}",
+          "raw": "{\r\n    \"mensaje\": \"Ya revisé el problema, ya se soluciono\"\r\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -456,14 +456,16 @@
           }
         },
         "url": {
-          "raw": "http://localhost:8080/comentarios",
+          "raw": "http://localhost:8080/comentarios/ticket/2",
           "protocol": "http",
           "host": [
             "localhost"
           ],
           "port": "8080",
           "path": [
-            "comentarios"
+            "comentarios",
+            "ticket",
+            "2"
           ]
         }
       },
@@ -477,7 +479,7 @@
           "bearer": [
             {
               "key": "token",
-              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkYW1pYW4iLCJyb2xlcyI6WyJBRE1JTiJdLCJpYXQiOjE3NzYxMTQ5MDgsImV4cCI6MTc3NjExODUwOH0.DV19oNJ0FP49B3mTzaF5hgVwtlUqIjFQuNFXjYMhcTQ",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkYW1pYW4iLCJyb2xlcyI6WyJBRE1JTiJdLCJpYXQiOjE3NzYyMTIzMDEsImV4cCI6MTc3NjIxNTkwMX0.T0l-vgrIvpK02ykKMhfV_hFo7RtGvSeDhg6KdtBeisY",
               "type": "string"
             }
           ]
@@ -495,6 +497,138 @@
             "comentarios",
             "ticket",
             "2"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Crear notificación",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkYW1pYW4iLCJyb2xlcyI6WyJBRE1JTiJdLCJpYXQiOjE3NzYzNzUxMDMsImV4cCI6MTc3NjM3ODcwM30.wvDgopA7Sm8D4Trw6SfrKZvn1lj6dVHmeDkdREbTSno",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"usuarioid\": 1,\r\n    \"tipo\": \"TICKET\",\r\n    \"mensaje\": \"Se te asignó el Ticket #101\",\r\n    \"referenciaId\": 101\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/notificaciones",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "notificaciones"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Obtener todas las notificaciones del usuario",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkYW1pYW4iLCJyb2xlcyI6WyJBRE1JTiJdLCJpYXQiOjE3NzYzNzUxMDMsImV4cCI6MTc3NjM3ODcwM30.wvDgopA7Sm8D4Trw6SfrKZvn1lj6dVHmeDkdREbTSno",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/notificaciones/usuario/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "notificaciones",
+            "usuario",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Contar pendientes",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/notificaciones/pendientes/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "notificaciones",
+            "pendientes",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Marcar una como leída",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/notificaciones/leer/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "notificaciones",
+            "leer",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Marcar todas como leídas",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/notificaciones/leer-todas/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "notificaciones",
+            "leer-todas",
+            "1"
           ]
         }
       },
