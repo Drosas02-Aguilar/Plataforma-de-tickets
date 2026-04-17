@@ -330,4 +330,56 @@ public class TicketController {
         return ResponseEntity.status(result.status).body(result);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','USER','AGENTE')")
+    @GetMapping("/asignados-a-mi")
+    public ResponseEntity<ServiceResult<TicketResponseDTO>> TicketsAsignadosAMi(
+            @AuthenticationPrincipal String username) {
+
+        ServiceResult<TicketResponseDTO> result = new ServiceResult<>();
+        try {
+
+            Optional<Usuario> usuarioOpt = iUsuario.findByUsername(username);
+
+            if (!usuarioOpt.isPresent()) {
+                result.status = 404;
+                result.ErrorMessage = "Usuario no encontrado";
+                return ResponseEntity.status(result.status).body(result);
+            }
+
+            List<Ticket> lista = ticketService.ObtenerPorAsignado(usuarioOpt.get().getIdusuario());
+
+            if (!lista.isEmpty()) {
+
+                List<TicketResponseDTO> dtos = lista.stream().map(t -> {
+                    TicketResponseDTO dto = new TicketResponseDTO();
+                    dto.setId(t.getIdticket());
+                    dto.setTitulo(t.getTitulo());
+                    dto.setDescripcion(t.getDescripcion());
+                    dto.setPrioridad(t.getPrioridad());
+                    dto.setEstadoticket(t.getEstadoTicket());
+                    dto.setFechacreacion(t.getFechacreacion());
+                    dto.setCreador(t.getCreador() != null ? t.getCreador().getUsername() : null);
+                    dto.setAsignado(t.getAsignado() != null ? t.getAsignado().getUsername() : null);
+                    return dto;
+                }).toList();
+
+                result.Objects = dtos;
+                result.correct = true;
+                result.status = 200;
+                result.message = "Tickets asignados encontrados";
+
+            } else {
+                result.status = 404;
+                result.ErrorMessage = "No tienes tickets asignados";
+
+            }
+
+        } catch (Exception ex) {
+
+            result.status = 500;
+            result.ErrorMessage = ex.getLocalizedMessage();
+        }
+        return ResponseEntity.status(result.status).body(result);
+    }
+
 }

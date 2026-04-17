@@ -36,6 +36,10 @@ public class TicketService {
         Optional<Ticket> opt = iTicket.findById(idticket);
         return opt.orElse(null);
     }
+    
+    public List<Ticket> ObtenerPorAsignado(Integer idusuario){
+    return iTicket.findByAsignado_Idusuario(idusuario);
+    }
 
     @Transactional
     public Ticket crearTicket(Ticket ticket, String username) {

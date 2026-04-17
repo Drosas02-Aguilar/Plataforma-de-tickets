@@ -14,5 +14,5 @@ public interface ITicket extends JpaRepository<Ticket, Integer> {
     List<Ticket> findByAsignado_Idusuario(Integer idusuario);
 
     List<Ticket> findByEstadoTicketAndAsignado_Idusuario(EstadoTicket estado, Integer idusuario);
-
+    
 }
