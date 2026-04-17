@@ -34,9 +34,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         auth -> auth
                                 .requestMatchers("/auth/**").permitAll()
+                                .requestMatchers("/ws/**").permitAll()
                                 .requestMatchers("/tickets/**").authenticated()
                                 .requestMatchers("/comentarios/**").authenticated()
                                 .requestMatchers("/usuarios/**").authenticated()
+                                .requestMatchers("/notificaciones/**").authenticated()
+                                
                                 .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

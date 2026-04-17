@@ -24,14 +24,13 @@ public class ComentarioService {
 
     @Autowired
     private IUsuario iUsuario;
-    
-    
-    public List<Comentario>ObtenerPorTicket(Integer ticketid){
-    
-    return iComentario.findByTicket_Idticket(ticketid);
-    
+
+    @Autowired
+    private NotificacionService notificacionService;
+
+    public List<Comentario> ObtenerPorTicket(Integer ticketid) {
+        return iComentario.findByTicket_Idticket(ticketid);
     }
-    
 
     @Transactional
     public Comentario agregarComentario(Integer ticketid, String username, String mensaje) {
@@ -40,16 +39,32 @@ public class ComentarioService {
         Optional<Usuario> usuOpt = iUsuario.findByUsername(username);
 
         if (ticketOpt.isPresent() && usuOpt.isPresent()) {
+
+            Ticket ticket = ticketOpt.get();
+            Usuario usuario = usuOpt.get();
+
             Comentario comentario = new Comentario();
-            comentario.setTicket(ticketOpt.get());
-            comentario.setAutor(usuOpt.get());
+            comentario.setTicket(ticket);
+            comentario.setAutor(usuario);
             comentario.setMensaje(mensaje);
             comentario.setFechacreacion(LocalDateTime.now());
 
-            return iComentario.save(comentario);
+            Comentario guardado = iComentario.save(comentario);
+
+            if (ticket.getCreador() != null
+                    && ticket.getCreador().getIdusuario() != usuario.getIdusuario()) {
+
+                notificacionService.Crear(
+                        ticket.getCreador().getIdusuario(),
+                        "COMENTARIO",
+                        "Nuevo comentario en el ticket #" + ticket.getTitulo(),
+                        ticket.getIdticket()
+                );
+            }
+
+            return guardado;
         }
 
         return null;
     }
-
 }

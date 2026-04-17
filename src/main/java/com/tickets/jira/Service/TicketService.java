@@ -20,11 +20,12 @@ public class TicketService {
 
     @Autowired
     private IUsuario iUsuario;
-    
-    
-    public List<Ticket> obtenerPorCreador(Integer idusuario){
-    return iTicket.findByCreador_Idusuario(idusuario);
-    
+
+    @Autowired
+    private NotificacionService notificacionService;
+
+    public List<Ticket> obtenerPorCreador(Integer idusuario) {
+        return iTicket.findByCreador_Idusuario(idusuario);
     }
 
     public List<Ticket> listarTickets() {
@@ -32,7 +33,6 @@ public class TicketService {
     }
 
     public Ticket ObtenerPorId(Integer idticket) {
-
         Optional<Ticket> opt = iTicket.findById(idticket);
         return opt.orElse(null);
     }
@@ -45,8 +45,17 @@ public class TicketService {
             ticket.setCreador(usuarioOpt.get());
             ticket.setEstadoTicket(EstadoTicket.ABIERTO);
             ticket.setFechacreacion(LocalDateTime.now());
-            return iTicket.save(ticket);
 
+            Ticket nuevo = iTicket.save(ticket);
+
+            notificacionService.Crear(
+                    usuarioOpt.get().getIdusuario(),
+                    "TICKET",
+                    "Creaste el ticket #" + nuevo.getIdticket() + nuevo.getTitulo(),
+                    nuevo.getIdticket()
+            );
+
+            return nuevo;
         }
         return null;
     }
@@ -62,6 +71,14 @@ public class TicketService {
             ticket.setEstadoTicket(EstadoTicket.PROCESO);
 
             iTicket.save(ticket);
+
+            notificacionService.Crear(
+                    agenteOpt.get().getIdusuario(),
+                    "TICKET",
+                    "Se te asignó: " + ticket.getTitulo(),
+                    ticket.getIdticket()
+            );
+
             return ticket;
         }
         return null;
@@ -77,10 +94,18 @@ public class TicketService {
             ticket.setFechaactualizacion(LocalDateTime.now());
 
             iTicket.save(ticket);
-            return ticket;
 
+            if (ticket.getCreador() != null) {
+                notificacionService.Crear(
+                        ticket.getCreador().getIdusuario(),
+                        "CAMBIO_ESTADO",
+                        "El ticket '" + ticket.getTitulo() + "' cambió a " + estado,
+                        ticket.getIdticket()
+                );
+            }
+
+            return ticket;
         }
         return null;
     }
-
 }
